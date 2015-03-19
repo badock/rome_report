@@ -1,0 +1,123 @@
+\documentclass{report}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Accents français
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Todo notes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \usepackage[textwidth=17mm]{todonotes}
+% \newcommand{\customtodo}[4]{
+%         \todo[color=#2,inline,size=\small]{
+%                 \ifx&#3&
+%                         \textbf{#1} #4
+%                 \else
+%                         \textbf{#1$\Rightarrow$#3} #4
+%                 \fi
+%         }
+% }
+\newcommand{\AL}[2][]{\customtodo{AL}{green!50}{#1}{#2}}
+\newcommand{\JP}[2][]{\customtodo{JP}{red!20}{#1}{#2}}
+\newcommand{\FD}[2][]{\customtodo{JP}{brown!20}{#1}{#2}}
+\newcommand{\LP}[2][]{\customtodo{MB}{orange!20}{#1}{#2}}
+
+\newcommand{\ie}[0]{{\em i.e.},\xspace}
+\newcommand{\vs}[0]{{\em vs.}\xspace}
+\newcommand{\eg}[0]{{\em e.g.},\xspace}
+\newcommand{\etal}[0]{{\em et al.}\xspace}
+\newcommand{\wrt}[0]{{\em w.r.t.}\xspace}
+\newcommand{\aka}[0]{{\em a.k.a.}\xspace}
+
+\usepackage{bera}% optional: just to have a nice mono-spaced font
+\usepackage{listings}
+\usepackage{xcolor}
+
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+\colorlet{numb}{magenta!60!black}
+
+\lstdefinelanguage{json}{
+    basicstyle=\normalfont\ttfamily,
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{background},
+    literate=
+     *{0}{{{\color{numb}0}}}{1}
+      {1}{{{\color{numb}1}}}{1}
+      {2}{{{\color{numb}2}}}{1}
+      {3}{{{\color{numb}3}}}{1}
+      {4}{{{\color{numb}4}}}{1}
+      {5}{{{\color{numb}5}}}{1}
+      {6}{{{\color{numb}6}}}{1}
+      {7}{{{\color{numb}7}}}{1}
+      {8}{{{\color{numb}8}}}{1}
+      {9}{{{\color{numb}9}}}{1}
+      {:}{{{\color{punct}{:}}}}{1}
+      {,}{{{\color{punct}{,}}}}{1}
+      {\{}{{{\color{delim}{\{}}}}{1}
+      {\}}{{{\color{delim}{\}}}}}{1}
+      {[}{{{\color{delim}{[}}}}{1}
+      {]}{{{\color{delim}{]}}}}{1},
+}
+
+
+\sloppy
+
+\usepackage{xspace}
+\usepackage{url}
+\usepackage{paralist}
+\usepackage{rotating}
+\usepackage{tikz}
+
+\begin{document}
+
+% \title{Integrating NoSQL databases in OpenStack Nova}
+
+% % \numberofauthors{4}
+% \author{
+% %
+% % 1st. author
+% % \alignauthor
+% Jonathan Pastor\\
+%        \affaddr{ASCOLA Research Group}\\
+%        \affaddr{Mines Nantes / Inria / LINA UMR 6241}\\
+%        \affaddr{Nantes, France}\\
+% }
+
+\title{Integrating NoSQL databases in OpenStack Nova}
+\author{Jonathan Pastor}
+
+
+\maketitle
+
+\tableofcontents
+
+\input{abstract}
+
+%% Comment this line for submission
+%\listoftodos
+
+\input{introduction}
+
+\input{collaboration}
+
+\input{proposition}
+
+\input{future_work}
+
+\input{conclusion}
+
+\bibliographystyle{abbrv}
+\bibliography{main}
+
+\end{document}
