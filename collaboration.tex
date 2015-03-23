@@ -6,15 +6,45 @@
 \section{Organisation of the collaboration between components of OpenStack}
 
 Collaboration between components of OpenStack is based on three different ways:
-AMQP \footnote{AMQP: Advanced Messaging Queuing Protocol} bus, HTTP APIs and
+AMQP \footnote{AMQP: Advanced Messaging Queuing Protocol} bus, APIs and
 sharing of inner-states via a replicated relational databases. Each of the 
-preceding way of collaborating have specific purposes: some are intended for 
+preceding ways of collaborating have specific purposes: some are intended for 
 local collaboration as with sub-services of a controller, while some of these
 ways are intended for inter-controller collaboration.
 
-\subsection{AMQP bus: making sub-services collaborating}
+\subsection{APIs: Exposing services to enable Remote Procedure Call (RPC)}
 
-\subsection{HTTP APIs: making sub-services collaborating}
+\begin{figure}[htbp]
+        \centering
+        \includegraphics[width=14cm]{figures/NovaServices_API.pdf}        
+        \caption{Collaboration between service thanks to APIs.}
+        \label{fig:sequence_vm_creation}
+\vspace*{-.3cm}
+\end{figure}
+
+
+
+
+APIs can be requested through two means: production/consumption of message on an
+AMQP bus or HTTP request.
+
+\subsubsection{AMQP bus: making sub-services collaborating with shared queues}
+
+The AMQP bus is used to connect services of a same controller via exchange of
+message. The message are send in queues, and then consumed by components that
+are registered to the queue. In the case of the Nova service, its sub-services
+are plugged on a RabbitMQ bus, and exchange data on it. However, post-mortem
+study of logs showed that the Queue was not important for inter-nodes
+collaboration: in a configuration where each controller has his own queue
+isolated the others', collaboration was still possible. queue seems to be a mean
+to do RPC \footnote{RPC: Remote Procedure Call} between services.
+
+
+\subsubsection{HTTP request}
+
+Services of OpenStack can also expose some of their functions via web service:
+it is possible for an user that is leveraging KeyStone authentication to query
+these web services to access service's APIs.
 
 \subsection{Shared inner-states: collaboration between remote controllers}
 
@@ -53,4 +83,12 @@ listing:
 }
 \end{lstlisting}
 
-It is noticable that this object as
+It is noticable that this object will evolve during the creation of the VM: at
+each step of the creation, a service will update some of the fields. To hand
+over to a another service in a next step, there is two possibilities:
+
+\begin{itemize}
+\item Directly contact the next service
+\item Push an updated version of the object in the database and let a service
+poll it and start the next step of the VM creation.
+\end{itemize}
