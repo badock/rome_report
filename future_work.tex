@@ -3,6 +3,26 @@
 
 \subsection{Improve reactivity of the ROME driver}
 
+During deployment of OpenStack in Grid'5000, it was noticeable that the long
+response time of OpenStack was due to ROME. A further study showed that querying
+objects sequentially was the source of this slow working: the current python
+client provided by RIAK does not work well with parallel access, thus we tried
+to tackle this problem by using a "pool of client" that would enable parallel
+access, however this solution have led to a slower functionning.
+
+A solution could be to keep a list of all objects of the bucket somewhere, thus
+accessing it would be O(1). Another solution would be to replace RIAK by a more
+reactive solution such as Redis or MongoDB. The two aforementioned KVS have the
+advantage of already beeing used by OpenStack.
+
 
 \subsection{Toward a "smooth" integration of the driver in OpenStack}
 
+Yet the driver is integrated in a "rough" way: we hacked the \emph{nova.db.api}
+class, and replace by hand the relational driver by the one that uses ROME. It
+would be better if the driver could be chosen thanks to Nova's configuration
+system (with a property in \emph{/etc/nova/nova.conf}).
+
+Furthermore, the relational and non relational implementation of the
+\emph{nova.db.api} is sharing 90\% of their code source. We should investigate
+on how to take advantage of this fact.

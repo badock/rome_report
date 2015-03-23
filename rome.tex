@@ -31,6 +31,9 @@ driver.
 
 \section{Mechanisms behind ROME}
 
+Documentation of how to use ROME can be found at:
+\textbf{\emph{https://github.com/badock/rome}}
+
 \subsection{How the storage works?}
 
 In order to ensure a compatibility between objects manipulated by the relational
@@ -63,10 +66,9 @@ mechanisms is illustrated in figure \ref{fig:rome_marshalling}
 \vspace*{-.3cm}
 \end{figure}
 
-Once the object has been marshalled, it can be saved in any Key/value store
-(KVS): if the KVS support JSON storing, then no transformation is needed,
+Once the object has been marshalled, it can be saved in any KVS \footnote{KVS: Key/value store}: if the KVS support JSON storing, then no transformation is needed,
 otherwise it is possible to store the JSON as a string. Keeping a JSON format is
-important as it is a widely supported format, which is good for 
+important as it is a widely supported format, which is good for
 interoperability.
 
 This JSON data is store in the bucket that corresponds to its original class:
@@ -74,4 +76,23 @@ every objects of the same class will be stored in the same bucket.
 
 \subsection{How objects are queried?}
 
+A stored object is associated with a bucket and an id. Thus find an object in
+database only consists in identifying its id and its bucket, and then to query
+the database for this object.
+
+\begin{figure}[h!]
+        \centering
+        \includegraphics[width=10cm]{figures/rome_query_all.pdf}
+        \caption{To query all objects in a bucket, ROME first grab keys of the
+        bucket and then query the objects sequentially.}
+      \label{fig:rome_marshalling}
+\vspace*{-.3cm}
+\end{figure}
+
+Querying all objects of a bucket is a bit more complicated: ROME first needs
+to get the keys of objects stored in the bucket, and then each object is
+sequentially queried. The sequential querying is due to our initial choice for
+a KVS backend: RIAK was posing problem when we made parallel access on database
+with the python client, thus we decided to tackle this problem later and to
+focus on the development of other functions.
 
